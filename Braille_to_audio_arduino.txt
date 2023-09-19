@@ -1,0 +1,30 @@
+// Define the pin numbers for the push buttons
+const int buttonPins[] = {2, 3, 4, 5, 6, 7, 8, 9};
+const int numButtons = sizeof(buttonPins) / sizeof(buttonPins[0]);
+
+void setup() {
+  // Start serial communication at 9600 bps
+  Serial.begin(9600);
+
+  // Initialize push button pins as inputs
+  for (int i = 0; i < numButtons; i++) {
+    pinMode(buttonPins[i], INPUT_PULLUP); // Use internal pull-up resistors
+  }
+}
+
+void loop() {
+  // Create a variable to store the button states as a binary string
+  String buttonStates = "";
+
+  // Read the state of each push button and append it to the string
+  for (int i = 0; i < numButtons; i++) {
+    int buttonState = digitalRead(buttonPins[i]);
+    buttonStates += String(buttonState);
+  }
+
+  // Send the button states over the serial port
+  Serial.println(buttonStates);
+
+  // Delay to prevent rapid serial output (adjust as needed)
+  delay(100);
+}

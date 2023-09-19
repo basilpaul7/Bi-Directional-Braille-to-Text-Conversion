@@ -1,0 +1,36 @@
+// Define the digital pins for controlling solenoids
+const int solenoidPins[] = {2, 3, 4, 5, 6, 7};
+const int numSolenoids = 6;
+
+void setup() {
+  // Initialize solenoid pins as outputs and set them to HIGH
+  for (int i = 0; i < numSolenoids; i++) {
+    pinMode(solenoidPins[i], OUTPUT);
+    digitalWrite(solenoidPins[i], HIGH);
+  }
+  
+  // Initialize serial communication at a specific baud rate
+  Serial.begin(9600);
+}
+
+void loop() {
+  // Read incoming data from the serial connection
+  if (Serial.available() > 0) {
+    // Read the incoming line
+    String input = Serial.readStringUntil('\n');
+    
+    // Check if the input is a valid Braille pattern
+    if (input.length() == numSolenoids) {
+      // Iterate through the solenoid pins and set them based on the Braille pattern
+      for (int i = 0; i < numSolenoids; i++) {
+        if (input.charAt(i) == '1') {
+          digitalWrite(solenoidPins[i], LOW);  // Turn on the solenoid
+        } else {
+          digitalWrite(solenoidPins[i], HIGH); // Turn off the solenoid
+        }
+      }
+    } else {
+      Serial.println("Invalid Braille pattern length.");
+    }
+  }
+}
